@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asynchronous To-Do List</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #todo-container { max-width: 400px; margin: auto; }
+        ul { list-style: none; padding: 0; }
+        li { 
+            background: #f3f3f3; 
+            padding: 10px; 
+            margin: 5px 0; 
+            display: flex; 
+            align-items: center;
+            gap: 10px;
+        }
+        .completed { text-decoration: line-through; color: gray; }
+        .error { color: red; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <h2>To-Do List</h2>
+    <div id="todo-container">
+        <input type="text" id="taskInput" placeholder="Add a new task">
+        <button onclick="addTask()">Add</button>
+        <p id="error-message" class="error"></p>
+        <ul id="taskList"></ul>
+        <h3>Fetched Tasks:</h3>
+        <ul id="fetchedTasks"></ul>
+    </div>
+
+    <script>
+        function addTask() {
+            let input = document.getElementById("taskInput");
+            let errorMessage = document.getElementById("error-message");
+            let taskText = input.value.trim();
+            
+            if (taskText === "") {
+                errorMessage.textContent = "Task cannot be empty!";
+                return;
+            }
+            errorMessage.textContent = "";
+
+            let li = document.createElement("li");
+            let checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.onchange = function() {
+                taskSpan.classList.toggle("completed", this.checked);
+            };
+
+            let taskSpan = document.createElement("span");
+            taskSpan.textContent = taskText;
+            
+            let deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "❌";
+            deleteBtn.onclick = function() {
+                this.parentElement.remove();
+            };
+
+            li.appendChild(checkbox);
+            li.appendChild(taskSpan);
+            li.appendChild(deleteBtn);
+            document.getElementById("taskList").appendChild(li);
+
+            input.value = "";
+        }
+
+        // Using setTimeout to display a message after 3 seconds
+        setTimeout(() => {
+            alert("Welcome to the To-Do List App!");
+        }, 3000);
+
+        // Using setInterval to fetch new tasks every 10 seconds
+        setInterval(fetchTasks, 10000);
+
+        function fetchTasks() {
+            fetch('https://jsonplaceholder.typicode.com/todos?_limit=5')
+                .then(response => response.json())
+                .then(data => {
+                    let fetchedTasks = document.getElementById("fetchedTasks");
+                    fetchedTasks.innerHTML = "";
+                    data.forEach(task => {
+                        let li = document.createElement("li");
+                        li.textContent = task.title;
+                        fetchedTasks.appendChild(li);
+                    });
+                })
+                .catch(error => console.error("Error fetching tasks:", error));
+        }
+
+        // Fetch initial tasks when the page loads
+        fetchTasks();
+    </script>
+</body>
+</html>

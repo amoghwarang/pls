@@ -1,0 +1,15 @@
+body { font-family: Impact, Haettenschweiler, 'Arial ', sans-serif, sans-serif; text-align: center; background-color: blanchedalmond; color: black; font-size: larger;}
+#todo-container { max-width: 400px; margin: auto; }
+ul { list-style: none; padding: 0; }
+li { 
+    background: #000000; 
+    padding: 10px; 
+    margin: 5px 0; 
+    display: flex; 
+    align-items: center;
+    gap: 10px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: larger ;
+    color: aliceblue;
+}
+.completed { text-decoration: line-through; color: gray; }
